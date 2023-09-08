@@ -10,7 +10,6 @@ if (isset($_POST['proses'])) {
   }
 }
 
-
 if (isset($_POST['simpanPisah'])) {
   if (simpan($_POST) > 0) {
   }
