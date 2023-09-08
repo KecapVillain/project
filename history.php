@@ -77,6 +77,9 @@ $penerima = mysqli_fetch_array($select_result_H);
         <?php $ulang++;
                     }
             ?>
+            <tr style="display: none;" id="data-kosong">
+                <td colspan="7" style="text-align: center;">tidak ada data</td>
+            </tr>
     </table>
     <hr>
 
@@ -98,7 +101,9 @@ endDateInput.addEventListener('input', filterData);
 function filterData() {
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
-
+    let datakosong = document.getElementById('data-kosong');
+    let ada = false;
+    
     // Loop melalui semua baris data, mulai dari indeks 1 untuk melewati baris header
     for (let i = 1; i < dataRows.length; i++) {
         const row = dataRows[i];
@@ -107,9 +112,17 @@ function filterData() {
         // Periksa apakah tanggal pada baris data berada dalam rentang yang dipilih
         if (rowDataDate >= startDate && rowDataDate <= endDate) {
             row.style.display = ''; // Tampilkan baris
+            
         } else {
             row.style.display = 'none'; // Sembunyikan baris
+            ada = true;
         }
+    }
+    if (ada) {
+        datakosong.style.display = '';
+    }
+    else{
+        datakosong.style.display = 'none';
     }
 }
 </script>
