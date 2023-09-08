@@ -5,7 +5,6 @@ $sql = "SELECT * FROM deskripsi_pdf";
 $query = mysqli_query($konek, $sql);
 $data = mysqli_fetch_array($query);
 
-
 if (isset($_POST['proses'])) {
   if (tambah_data($_POST) > 0) {
   }
