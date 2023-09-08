@@ -2,10 +2,8 @@
 require "config/function.php";
 require "config/koneksi.php";
 $sql = "SELECT * FROM deskripsi_pdf";
-$query = mysqli_query($konek,$sql);
+$query = mysqli_query($konek, $sql);
 $data = mysqli_fetch_array($query);
-
-
 
 
 if (isset($_POST['proses'])) {
@@ -58,7 +56,7 @@ if (isset($_POST['prosesDescPDF'])) {
   <!-- Button trigger modal -->
 
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" name="awal">
-   tambah barang
+    tambah barang
   </button>
 
   <!-- Modal -->
@@ -73,7 +71,7 @@ if (isset($_POST['prosesDescPDF'])) {
           <div class="modal-body">
 
             <input type="text" value="<?= $transactionNumber; ?>" name="NT" hidden>
-            
+
             <div class="row mb-3">
               <label for="" class="col-sm-2 col-form-label">Deskripsi</label>
               <div class="col-sm-10">
@@ -92,7 +90,7 @@ if (isset($_POST['prosesDescPDF'])) {
                 <input type="text" class="form-control" id="input_harga" name="harga" placeholder="0" oninput="validasiangka1()" required>
               </div>
             </div>
-     
+
             <div class="row mb-3">
               <label for="input_diskon" class="col-sm-2 col-form-label">diskon</label>
               <div class="col-sm-10">
@@ -151,7 +149,7 @@ if (isset($_POST['prosesDescPDF'])) {
         $ppn = 0;
         $total = 0;
         $granTotal = 0;
-    $subarray = array();
+        $subarray = array();
         ?>
         <?php
 
@@ -162,7 +160,7 @@ if (isset($_POST['prosesDescPDF'])) {
             <?php
             $subtotal =  $display['QTY'] * $display['harga'];
             $total += $subtotal;
-            
+
             $totalDisc += $display["diskon"];
             $totaldantotalDisc = $total * ($totalDisc / 100); // hasil total * diskon
             $hasilTDTD =  $total - $totaldantotalDisc;
@@ -175,11 +173,11 @@ if (isset($_POST['prosesDescPDF'])) {
             <td style="width: 13%;"><input type="text" readonly value="<?= number_format($display['harga']); ?>" style="width: 100%; border: none;"></td>
             <input type="text" readonly value="<?= $display["harga"]; ?>" style="width: 100%; border: none;" name="hargaB" hidden>
             <td style="width: 13%;"><input type="text" readonly value="<?php echo $display['diskon'] . "%"; ?>" style="width: 100%; border: none;" name="diskonB"></td>
-            <td style="width: 13%;"><input type="text" readonly value="<?= number_format($subtotal); ?>" style="width: 100%; border: none;" ></td>
+            <td style="width: 13%;"><input type="text" readonly value="<?= number_format($subtotal); ?>" style="width: 100%; border: none;"></td>
             <input type="text" readonly value="<?= $subtotal; ?>" style="width: 100%; border: none;" name="subtotalB" hidden>
             <td style=""><button type="submit" name="batal"><a style="text-decoration: none;" href="hapus.php?pk=<?= $display['pk'] ?>">Batal</a></button></td>
           </tr>
-        
+
         <?php
         }
         ?>
@@ -192,7 +190,7 @@ if (isset($_POST['prosesDescPDF'])) {
           <td style="padding-left: 5px; padding-right: 5px;">Total :</td>
           <input type="text" name="total" id="" value="<?= $total; ?>" readonly style="width: 100%; border: none;" hidden>
           <td style="width: 10%; padding-left: 5px; padding-right: 5px;"><input type="text" name="" id="" value="<?= number_format($total); ?>" readonly style="width: 100%; border: none;"></td>
-          
+
         </tr>
         <tr style="border: white;">
           <td></td>
@@ -234,13 +232,13 @@ if (isset($_POST['prosesDescPDF'])) {
                                                                                             } else if ($databatal == false) {
                                                                                               echo "";
                                                                                             } ?>>batal</button>
-       <a href="pdf.php" target="_blank" rel="noopener noreferrer">Cetak</a>
+      <a href="pdf.php" target="_blank" rel="noopener noreferrer">Cetak</a>
 
     </div>
   </form>
-  
+
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#example2" name="awal2">
-   Edit deskripsi
+    Edit deskripsi
   </button>
 
   <!-- Modal -->
@@ -254,28 +252,28 @@ if (isset($_POST['prosesDescPDF'])) {
           </div>
           <div class="modal-body">
             <div class="row mb-3">
-              <label for="" class="col-sm-2 col-form-label">No 1:  <div id="counter1"></div> </label>
+              <label for="" class="col-sm-2 col-form-label">No 1: <div id="counter1"></div> </label>
               <div class="col-sm-10">
-                <textarea name="pertama" id="panjangkata1" value="" cols="30" rows="2" maxlength="120" class="form-control" oninput="length1()"><?= $data['pertama']?></textarea>
+                <textarea name="pertama" id="panjangkata1" value="" cols="30" rows="2" maxlength="120" class="form-control" oninput="length1()"><?= $data['pertama'] ?></textarea>
               </div>
             </div>
             <div class="row mb-3">
-            <label for="" class="col-sm-2 col-form-label">No 2:  <div id="counter2"></div> </label>
+              <label for="" class="col-sm-2 col-form-label">No 2: <div id="counter2"></div> </label>
               <div class="col-sm-10">
-                <textarea name="kedua" id="panjangkata2" cols="30" rows="2" maxlength="120" class="form-control" oninput="length2()"><?= $data['kedua']?></textarea>
+                <textarea name="kedua" id="panjangkata2" cols="30" rows="2" maxlength="120" class="form-control" oninput="length2()"><?= $data['kedua'] ?></textarea>
               </div>
             </div>
             <div class="row mb-3">
-            <label for="" class="col-sm-2 col-form-label">No 3:  <div id="counter3"></div> </label>
+              <label for="" class="col-sm-2 col-form-label">No 3: <div id="counter3"></div> </label>
               <div class="col-sm-10">
-                <textarea name="ketiga" id="panjangkata3" cols="30" rows="2" maxlength="120" class="form-control" oninput="length3()"><?= $data['ketiga']?></textarea>
+                <textarea name="ketiga" id="panjangkata3" cols="30" rows="2" maxlength="120" class="form-control" oninput="length3()"><?= $data['ketiga'] ?></textarea>
               </div>
             </div>
-     
+
             <div class="row mb-3">
-            <label for="" class="col-sm-2 col-form-label">No 4:  <div id="counter4" ></div> </label>
+              <label for="" class="col-sm-2 col-form-label">No 4: <div id="counter4"></div> </label>
               <div class="col-sm-10">
-                <textarea name="keempat" id="panjangkata4" cols="30" rows="2" maxlength="120" class="form-control" oninput="length3,()"><?= $data['keempat']?></textarea>
+                <textarea name="keempat" id="panjangkata4" cols="30" rows="2" maxlength="120" class="form-control" oninput="length3,()"><?= $data['keempat'] ?></textarea>
               </div>
             </div>
 
@@ -309,40 +307,42 @@ if (isset($_POST['prosesDescPDF'])) {
       let kop = pok.value;
       pok.value = kop.replace(/[^0-9%]/g, '')
     }
-   function length1(){
-     let mkan = document.getElementById('panjangkata1');
-     let counter = document.getElementById('counter1');
-     let max = mkan.maxLength;
-    let countmax = mkan.value.length;
-     counter.innerHTML = countmax + "/" + max;
-    } 
-    function length2(){
-     let mkan = document.getElementById('panjangkata2');
-     let counter = document.getElementById('counter2');
-    let max = mkan.maxLength;
-    let countmax = mkan.value.length;
-     counter.innerHTML = countmax + "/" + max;
-    } 
-    function length3(){
-     let mkan = document.getElementById('panjangkata3');
-     let counter = document.getElementById('counter3');
-    let max = mkan.maxLength;
-    let countmax = mkan.value.length;
-     counter.innerHTML = countmax + "/" + max;
-    } 
-    
-    function length4(){
-     let mkan = document.getElementById('panjangkata4');
-     let counter = document.getElementById('counter4');
-    let max = mkan.maxLength;
-    let countmax = mkan.value.length;
-     counter.innerHTML = countmax + "/" + max;
-    } 
+
+    function length1() {
+      let mkan = document.getElementById('panjangkata1');
+      let counter = document.getElementById('counter1');
+      let max = mkan.maxLength;
+      let countmax = mkan.value.length;
+      counter.innerHTML = countmax + "/" + max;
+    }
+
+    function length2() {
+      let mkan = document.getElementById('panjangkata2');
+      let counter = document.getElementById('counter2');
+      let max = mkan.maxLength;
+      let countmax = mkan.value.length;
+      counter.innerHTML = countmax + "/" + max;
+    }
+
+    function length3() {
+      let mkan = document.getElementById('panjangkata3');
+      let counter = document.getElementById('counter3');
+      let max = mkan.maxLength;
+      let countmax = mkan.value.length;
+      counter.innerHTML = countmax + "/" + max;
+    }
+
+    function length4() {
+      let mkan = document.getElementById('panjangkata4');
+      let counter = document.getElementById('counter4');
+      let max = mkan.maxLength;
+      let countmax = mkan.value.length;
+      counter.innerHTML = countmax + "/" + max;
+    }
     window.addEventListener('load', length1);
     window.addEventListener('load', length2);
     window.addEventListener('load', length3);
     window.addEventListener('load', length4);
-
   </script>
 
 
