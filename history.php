@@ -77,8 +77,6 @@ $penerima = mysqli_fetch_array($select_result_H);
         <?php $ulang++;
                     }
             ?>
-    
-
     </table>
     <hr>
 
