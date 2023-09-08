@@ -159,12 +159,12 @@ $konek->close();
 
 function resets($post){
     global $konek;
-$select_query = "SELECT COUNT(*) AS count FROM invoice WHERE waktu >= NOW() - INTERVAL 526000 MINUTE";
+$select_query = "SELECT COUNT(*) AS count FROM invoice";
 $select_result = $konek->query($select_query);
 $row = $select_result->fetch_assoc();
 $data_count = $row['count'];
     if ($data_count>0) {
-    $sql = "DELETE FROM invoice WHERE waktu >= NOW() - INTERVAL 526000 MINUTE";
+    $sql = "DELETE FROM invoice";
     mysqli_query($konek, $sql);
     if ($konek->query($sql) === TRUE) {
         $link = "index.php";
