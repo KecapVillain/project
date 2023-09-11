@@ -397,5 +397,6 @@ require "./vendor/spipu/html2pdf/src/Html2Pdf.php";
 $pdf = new Html2Pdf('L', 'A5', 'en');
 $pdf->pdf->setTitle("Transaksi");
 $pdf->WriteHTML($html);
-$pdf->Output('Data Transaksi.pdf', 'I');
+$pdfoutput = 'Data_Transaksi.pdf';
+$pdf->Output($pdfoutput, 'I');
 ?>
