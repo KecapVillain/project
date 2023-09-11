@@ -88,7 +88,7 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
 
 
             if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE && $konek->query($sql3) === TRUE) {
-                global $databaru,$databatal,$datacetak;
+                global $databaru,$databatal;
                 $databaru = true;
                 $databatal = true;
            
@@ -269,5 +269,3 @@ function descPDF($post){
         echo "error". $konek->error;
     }
 }
-
-
