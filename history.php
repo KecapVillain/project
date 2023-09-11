@@ -40,13 +40,15 @@ $penerima = mysqli_fetch_array($select_result_H);
 </style>
 
 <body>
-<label for="start-date">Tanggal Awal:</label>
-<input type="date" id="start-date">
+    <form action="" method="post">
 
-<label for="end-date">Tanggal Akhir:</label>
-<input type="date" id="end-date">
-    <br>
+        <label for="start-date">Tanggal Awal:</label>
+        <input type="date" name="tgl_awal" value="<?= date('Y-m-01');?>">
 
+        <label for="end-date">Tanggal Akhir:</label>
+        <input type="date" name="tgl_akhir" value="<?= date('Y-m-d');?>">
+        <button type="submit" name="filter">cari</button>
+    </form>
     <table class="table-costume" border="2" style="margin: auto;">
         <tr>
             <th>NO</th>
@@ -58,72 +60,44 @@ $penerima = mysqli_fetch_array($select_result_H);
             <th>Disc</th>
         </tr>
         <?php
-        $total = 0;
-        $totalDisc = 0;
-            $ulang = 1;
-            while ($dis_b =  mysqli_fetch_assoc($select_result_B)) {
 
-        ?>
-                        <tr id="data-list">
-                            <td ><?= $ulang ?></td>
-                            <td ><?= $dis_b['NT'] ?></td>
-                            <td data-date="<?= $dis_b['waktu'] ?>"><?= $dis_b['waktu'] ?></td>
-                            <td><?= $dis_b['deskripsi'] ?></td>
-                            <td><?= $dis_b['QTY'] ?></td>
-                            <td><?= number_format($dis_b['harga']); ?></td>
-                            <td><?= $dis_b['diskon'] ?>%</td>
-                        </tr>
-
-        <?php $ulang++;
+        if (isset($_POST["filter"])) {
+            echo "<button>reset</button>";
+            $awal = $_POST['tgl_awal'];
+            $akhir = $_POST["tgl_akhir"];
+            if (isset($awal) && isset($akhir) && !empty($awal) && !empty($akhir)) {
+                $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
+                $hasil = mysqli_query($konek, $quer);
+                $total = 0;
+                $totalDisc = 0;
+                $ulang = 1;
+                if (mysqli_num_rows($hasil) > 0) {
+                    while ($dis_b = mysqli_fetch_assoc($select_result_B)) {
+                        echo "<tr id='data-list'>";
+                        echo "<td>" . $ulang . "</td>";
+                        echo "<td>" . $dis_b['NT'] . "</td>";
+                        echo "<td data-date='" . $dis_b['waktu'] . "'>" . $dis_b['waktu'] . "</td>";
+                        echo "<td>" . $dis_b['deskripsi'] . "</td>";
+                        echo "<td>" . $dis_b['QTY'] . "</td>";
+                        echo "<td>" . number_format($dis_b['harga']) . "</td>";
+                        echo "<td>" . $dis_b['diskon'] . "%</td>";
+                        echo "</tr>";
+                        $ulang++;
                     }
-            ?>
-            <tr style="display: none;" id="data-kosong">
-                <td colspan="7" style="text-align: center;">tidak ada data</td>
-            </tr>
+                } else {
+                    echo " <tr>";
+                    echo '<td colspan="7" style="text-align: center;">tidak ada data</td>';
+                    echo "</tr>";
+                }
+            }
+        }
+        ?>
     </table>
     <hr>
 
 
 </body>
 <script>
-// Ambil elemen input tanggal
-const startDateInput = document.getElementById('start-date');
-const endDateInput = document.getElementById('end-date');
-
-// Ambil semua baris data
-const dataRows = document.querySelectorAll('tr');
-
-// Tambahkan event listener ke elemen input tanggal
-startDateInput.addEventListener('input', filterData);
-endDateInput.addEventListener('input', filterData);
-
-// Fungsi untuk menerapkan filter berdasarkan rentang tanggal
-function filterData() {
-    const startDate = new Date(startDateInput.value);
-    const endDate = new Date(endDateInput.value);
-    let datakosong = document.getElementById('data-kosong');
-    let ada = false;
-    
-    // Loop melalui semua baris data, mulai dari indeks 1 untuk melewati baris header
-    for (let i = 1; i < dataRows.length; i++) {
-        const row = dataRows[i];
-        const rowDataDate = new Date(row.querySelector('td[data-date]').getAttribute('data-date'));
-
-        // Periksa apakah tanggal pada baris data berada dalam rentang yang dipilih
-        if (rowDataDate >= startDate && rowDataDate <= endDate) {
-            row.style.display = ''; // Tampilkan baris
-            
-        } else {
-            row.style.display = 'none'; // Sembunyikan baris
-            ada = true;
-        }
-    }
-    if (ada) {
-        datakosong.style.display = '';
-    }
-    else{
-        datakosong.style.display = 'none';
-    }
-}
 </script>
+
 </html>
