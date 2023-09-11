@@ -5,6 +5,14 @@ $sql = "SELECT * FROM deskripsi_pdf";
 $query = mysqli_query($konek, $sql);
 $data = mysqli_fetch_array($query);
 
+// Load PHPMailer
+require 'vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+
+
 if (isset($_POST['proses'])) {
   if (tambah_data($_POST) > 0) {
   }
@@ -29,7 +37,40 @@ if (isset($_POST['prosesDescPDF'])) {
   if (descPDF($_POST) > 0) {
   }
 }
+if (isset($_POST['Email'])) {
+  
+$mail = new PHPMailer(true);
 
+// Konfigurasi SMTP (jika menggunakan SMTP)
+$mail->isSMTP();
+$mail->Host       = 'smtp.gmail.com';
+$mail->SMTPAuth   = true;
+$mail->Username = 'cri.bhaskara@gmail.com';
+$mail->Password = 'vldwypwqfvqmowgn';
+$mail->SMTPSecure = 'tls';
+$mail->Port       = 587;
+
+// Set pengirim
+$mail->setFrom('cri.bhaskara@gmail.com', 'BSB');
+
+// Set penerima
+$mail->addAddress('cri.bhaskara@gmail.com', '');
+
+// Set subjek dan isi pesan
+$mail->Subject = 'apcb';
+$mail->Body    = '';
+$mail->addAttachment('Data_Transaksi.pdf', 'Data_Transaksi.pdf');
+
+// Kirim email
+if ($mail->send()) {
+    echo '<script>
+    alert("Terkirim!");
+    </script>';
+} else {
+    echo 'Email could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+}
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -285,6 +326,31 @@ if (isset($_POST['prosesDescPDF'])) {
     </div>
   </form>
 
+   <!-- Modal -->
+   
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#emxaple3" name="awal2">
+    Email
+  </button>
+
+   <form method="post">
+    <div class="modal fade" id="emxaple3" tabindex="-1" aria-labelledby="example3ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="example3ModalLabel">Email</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="Email">kirim</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 
 
   <script>
