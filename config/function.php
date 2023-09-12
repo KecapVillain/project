@@ -3,13 +3,11 @@ session_start();
 $konek = mysqli_connect("localhost", "root", "", "project");
 
 
-$databaru = false;
-$databatal = false;
-
 
 //  insert invoice (table)
 
-function tambah_data($post){
+function tambah_data($post)
+{
     global $konek;
 
     $NT = $_POST["NT"];
@@ -18,17 +16,15 @@ function tambah_data($post){
     $jumlah = $_POST["QTY"];
     $harga = $_POST["harga"];
     $diskon = $_POST["diskon"];
-    
+
 
     $sql = "INSERT INTO invoice (NT,tgl,deskripsi, tglJtauhTempo , QTY , harga , diskon  , waktu)
             VALUES ('$NT','$tanggal', '$deskripsi', '$tanggal' , '$jumlah' ,'$harga' , '$diskon' ,NOW())";
-            if ($konek->query($sql) === TRUE) {
-            
-            }
-            else{
-                echo "error :". $konek->error;
-            }
-        }
+    if ($konek->query($sql) === TRUE) {
+    } else {
+        echo "error :" . $konek->error;
+    }
+}
 
 
 // nomor transaksi
@@ -55,146 +51,140 @@ $transactionNumber = $_SESSION['transactionNumber'];
 
 // =================simpan======================
 
-function simpan($post){
+function simpan($post)
+{
     global $konek;
     $NT = $_POST["NT"];
     $tanggal = date("Y-m-d H:i:s");
     $nama = $_POST["nama"];
     $_SESSION['nama'] = $nama;
-$deskripsi = $_POST["deskripsiB"];
-$jumlah = $_POST["QTYB"];
-$harga = $_POST["hargaB"];
-$total = $_POST["total"];
-$PPN = $_POST["PPN"];
-$totalDISC = $_POST["totalDISC"];
-$grantotal = $_POST["grantotal"];
+    $deskripsi = $_POST["deskripsiB"];
+    $jumlah = $_POST["QTYB"];
+    $harga = $_POST["hargaB"];
+    $total = $_POST["total"];
+    $PPN = $_POST["PPN"];
+    $totalDISC = $_POST["totalDISC"];
+    $grantotal = $_POST["grantotal"];
 
-if (empty($nama) || empty($deskripsi) || empty($jumlah) || empty($harga) ||  empty($total) ) {
+    if (empty($nama) || empty($deskripsi) || empty($jumlah) || empty($harga) ||  empty($total)) {
 
-    echo"<script>
+        echo "<script>
     alert('Data tidak boleh kosong!');
     </script>";
-    
-}else{
-    $sql = "INSERT INTO invoice_header (NT,tgl,nama, tglJatuhTempo, total, PPN , totalDISC ,granTOTAL ,waktu)
+    } else {
+        $sql = "INSERT INTO invoice_header (NT,tgl,nama, tglJatuhTempo, total, PPN , totalDISC ,granTOTAL ,waktu)
             VALUES ('$NT','$tanggal', '$nama', '$tanggal','$total', '$PPN' , '$totalDISC', '$grantotal' ,NOW())";
-            
-            
-$sql3 = "INSERT INTO invoice_pdf (nama,totalDISC, subtotal, PPN, waktu)
+
+
+        $sql3 = "INSERT INTO invoice_pdf (nama,totalDISC, subtotal, PPN, waktu)
 SELECT '$nama','$totalDISC', (QTY * harga), '$PPN' , NOW() FROM invoice";
 
-$sql2 = "INSERT INTO invoice_body (NT,deskripsi, QTY ,harga, diskon ,subtotal, waktu)
+        $sql2 = "INSERT INTO invoice_body (NT,deskripsi, QTY ,harga, diskon ,subtotal, waktu)
 SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
 
 
-            if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE && $konek->query($sql3) === TRUE) {
-                global $databaru,$databatal;
-                $databaru = true;
-                $databatal = true;
-           
-                    echo "<script>
+        if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE && $konek->query($sql3) === TRUE) {
+            $_SESSION['tombol_disable'] = false;
+            $_SESSION['tombol_batal'] = true;
+
+            echo "<script>
                 
                     alert('tersimpan!');
-
+                    
                     </script>";
-                    unset($_SESSION['transactionNumber']);
-                
-                
-                    }
-                    else{
-                        echo "error :". $konek->error;
-                    }
-                     
-                }
+            
+        } else {
+            echo "error :" . $konek->error;
+        }
+    }
 }
 
 
 //==================baru=================
-function baru($post){
+function baru($post)
+{
 
     global $konek;
-$select_query = "SELECT COUNT(*) AS count FROM invoice";
-$select_result = $konek->query($select_query);
-$row = $select_result->fetch_assoc();
-$data_count = $row['count'];
+    $select_query = "SELECT COUNT(*) AS count FROM invoice";
+    $select_result = $konek->query($select_query);
+    $row = $select_result->fetch_assoc();
+    $data_count = $row['count'];
 
-$select_query2 = "SELECT COUNT(*) AS count FROM invoice_pdf";
-$select_result2 = $konek->query($select_query2);
-$row = $select_result2->fetch_assoc();
-$data_count2 = $row['count'];
-if ($data_count > 0 && $data_count2 > 0) {
-    $sql = "DELETE FROM invoice";
-    $sql2 = "DELETE FROM invoice_pdf";
-    mysqli_query($konek, $sql);
-    if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE) {
-        $_SESSION = [];
-        session_unset();
-        session_destroy();
-        header("Location: index.php");
-        exit;
+    $select_query2 = "SELECT COUNT(*) AS count FROM invoice_pdf";
+    $select_result2 = $konek->query($select_query2);
+    $row = $select_result2->fetch_assoc();
+    $data_count2 = $row['count'];
+    if ($data_count > 0 && $data_count2 > 0) {
+        $sql = "DELETE FROM invoice";
+        $sql2 = "DELETE FROM invoice_pdf";
+        mysqli_query($konek, $sql);
+        if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE) {
+            unset($_SESSION['nama']);
+            unset($_SESSION['transactionNumber']);
+            $_SESSION['tombol_disable'] = true;
+            $_SESSION['tombol_batal'] = false;
+            header("Location: index.php");
+            exit;
 
-        $link = "index.php";
-        echo "
-      <script>
-      alert('reset successfully')
-      window.location.href = '$link';
-      </script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $konek->error;
-        
-    }
-} else {
-    $link = "index.php";
-    echo "
-            <script>
-            alert('tidak ada data')
-            window.location.href = '$link';
-            </script>";
-}
-
-$konek->close();
-
-}
-
-
-function resets($post){
-    global $konek;
-$select_query = "SELECT COUNT(*) AS count FROM invoice";
-$select_result = $konek->query($select_query);
-$row = $select_result->fetch_assoc();
-$data_count = $row['count'];
-    if ($data_count>0) {
-    $sql = "DELETE FROM invoice";
-    mysqli_query($konek, $sql);
-    if ($konek->query($sql) === TRUE) {
-        $link = "index.php";
-      echo "
-      <script>
-      alert('reset successfully')
-      window.location.href = '$link';
-      </script>";
-      
-    } else {
-      echo "Error: " . $sql . "<br>" . $konek->error;
-    }
-          
-        }
-        else{
             $link = "index.php";
             echo "
+      <script>
+      alert('reset successfully')
+      window.location.href = '$link';
+      </script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $konek->error;
+        }
+    } else {
+        $link = "index.php";
+        echo "
             <script>
             alert('tidak ada data')
             window.location.href = '$link';
             </script>";
-        }
+    }
 
-$konek->close();
+    $konek->close();
+}
+
+
+function resets($post)
+{
+    global $konek;
+    $select_query = "SELECT COUNT(*) AS count FROM invoice";
+    $select_result = $konek->query($select_query);
+    $row = $select_result->fetch_assoc();
+    $data_count = $row['count'];
+    if ($data_count > 0) {
+        $sql = "DELETE FROM invoice";
+        mysqli_query($konek, $sql);
+        if ($konek->query($sql) === TRUE) {
+            $link = "index.php";
+            echo "
+      <script>
+      alert('reset successfully')
+      window.location.href = '$link';
+      </script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $konek->error;
+        }
+    } else {
+        $link = "index.php";
+        echo "
+            <script>
+            alert('tidak ada data')
+            window.location.href = '$link';
+            </script>";
+    }
+
+    $konek->close();
 }
 
 
 // terbilang pada pdf
 
-function terbilang($angka) {
+function terbilang($angka)
+{
     $angka;
     $bilangan = array(
         '',
@@ -221,11 +211,15 @@ function terbilang($angka) {
     if ($angka < 12) {
         $terbilang = $bilangan[$angka];
     } elseif ($angka < 20) {
-        $terbilang = terbilang($angka - 10) . ' belas';
+        if ($angka == 1) {
+            $terbilang = 'satu';
+        } else {
+            $terbilang = terbilang($angka - 10) . ' belas';
+        }
     } elseif ($angka < 100) {
         $terbilang = terbilang($angka / 10) . ' puluh ' . terbilang($angka % 10);
     } elseif ($angka < 200) {
-        $terbilang = ' seratus ' . terbilang($angka - 100); 
+        $terbilang = ' seratus ' . terbilang($angka - 100);
     } elseif ($angka < 1000) {
         $terbilang = terbilang($angka / 100) . ' ratus ' . terbilang($angka % 100);
     } elseif ($angka < 2000) {
@@ -244,8 +238,9 @@ function terbilang($angka) {
 }
 
 
- //edit deskripsi pada pdf
-function descPDF($post){
+//edit deskripsi pada pdf
+function descPDF($post)
+{
     global $konek;
     $pertama = $_POST['pertama'];
     $kedua = $_POST['kedua'];
@@ -260,12 +255,11 @@ function descPDF($post){
     ";
     if ($konek->query($update) === TRUE) {
         $link = "index.php";
-        echo"<script>
+        echo "<script>
         alert('Terupdate');
         window.location.href = '$link';
         </script>";
-    }
-    else{
-        echo "error". $konek->error;
+    } else {
+        echo "error" . $konek->error;
     }
 }
