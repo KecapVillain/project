@@ -151,7 +151,8 @@ $row = mysqli_num_rows($select_result);
                         $hasilTDTD =  $total - $totaldantotalDisc;
                         $ppn = $hasilTDTD * 0.02;
                         $granTotal = $hasilTDTD + $ppn;
-                        $terbilang = terbilang($granTotal);
+                        $terbilang = terbilang(round($granTotal));
+                        
         ?>
                         <tr>
                             <td><?= $ulang ?></td>
@@ -397,6 +398,5 @@ require "./vendor/spipu/html2pdf/src/Html2Pdf.php";
 $pdf = new Html2Pdf('L', 'A5', 'en');
 $pdf->pdf->setTitle("Transaksi");
 $pdf->WriteHTML($html);
-$pdfoutput = 'Data_Transaksi.pdf';
-$pdf->Output($pdfoutput, 'I');
+$pdf->Output("Data_Transaksi.pdf", 'I');
 ?>
