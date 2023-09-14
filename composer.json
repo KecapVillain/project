@@ -1,7 +1,8 @@
 {
     "require": {
         "spipu/html2pdf": "^5.2",
-        "phpmailer/phpmailer": "^6.8"
+        "phpmailer/phpmailer": "^6.8",
+        "phpoffice/phpspreadsheet": "^1.29"
     },
     "config": {
         "allow-plugins": {
