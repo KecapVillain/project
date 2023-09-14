@@ -57,28 +57,25 @@ require "config/koneksi.php";
             if (isset($awal) && isset($akhir) && !empty($awal) && !empty($akhir)) {
                 $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
                 $hasil = mysqli_query($konek, $quer);
-                $linkpdf = "pdfHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
+                $linkPDF = "pdfHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
+                $linkExcel = "excelHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
                 $total = 0;
                 $totalDisc = 0;
             } else {
                 $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
                 $hasil = mysqli_query($konek, $quer);
-                $linkpdf = "pdfHistory.php";
+                $linkPDF = "pdfHistory.php";
+                $linkExcel = "excelHistory.php";
             }
         ?>
-            <a href="<?= $linkpdf ?>" target="_blank" rel="noopener noreferrer">Cetak</a>'
+            <a href="<?= $linkPDF ?>" target="_blank" rel="noopener noreferrer">Cetak PDF</a>
+            <a href="<?= $linkExcel ?>" target="_blank" rel="noopener noreferrer">Cetak Excel</a>
 
 
 
         <?php
             $ulang = 1;
-            if (mysqli_num_rows($hasil) == 0) { ?>
-            <tr>
-                <td>
-                    kosong
-                </td>
-            </tr>
-           <?php }else{
+           
                 if (mysqli_num_rows($hasil) > 0) {
                     while ($dis_b = mysqli_fetch_assoc($hasil)) {
                         echo "<tr id='data-list'>";
@@ -98,7 +95,7 @@ require "config/koneksi.php";
                 echo "</tr>";
             }
         }
-        }
+        
         ?>
     </table>
     <hr>
@@ -106,6 +103,36 @@ require "config/koneksi.php";
 
 </body>
 <script>
+      function searchtabel() {
+        let inputh = document.getElementById("inputsearch")
+        let filter = inputh.value.toUpperCase()
+        let table = document.getElementById("data-table")
+        let tr = table.getElementsByTagName("tr")
+        let gada = document.getElementById("gada")
+        let ktmu = false
+        for (let j = 0; j < tr.length; j++) {
+          let td = tr[j].getElementsByTagName("td")
+          for (let i = 0; i < td.length; i++) {
+            if (td[i]) {
+              let txtvalue = td[i].innerText || td[i].textContent
+              if (txtvalue.toUpperCase().indexOf(filter) > -1) {
+                tr[j].style.display = "";
+                ktmu = true
+                break;
+              } else {
+                tr[j].style.display = "none";
+
+              }
+            }
+          }
+        }
+        if (ktmu) {
+          gada.style.display = "none"
+        } else {
+          gada.style.display = ""
+        }
+
+      }
 </script>
 
 </html>
