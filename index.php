@@ -303,7 +303,7 @@ if (isset($_POST['prosesDescPDF'])) {
     Email
   </button>
 
-   <form action="pdf2.php" method="post">
+   <form action="pdf-Email.php" method="post">
     <div class="modal fade" id="emxaple3" tabindex="-1" aria-labelledby="example3ModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
