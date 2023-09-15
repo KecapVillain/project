@@ -46,7 +46,7 @@ $kepala = [
 
 $badan = [
     'alignment' => [
-        'horizontal' => Alignment::HORIZONTAL_LEFT
+        'horizontal' => Alignment::HORIZONTAL_LEFT,
     ],
     'borders' => [
         'allBorders' => [
@@ -58,14 +58,19 @@ $badan = [
 $dataKosong = [
     'alignment' => [
         'horizontal' => Alignment::HORIZONTAL_CENTER,
-        'vertical' => Alignment::VERTICAL_CENTER
+        'vertical' => Alignment::VERTICAL_CENTER,
+    ],
+    'borders'=>[
+        'allBorders' =>[
+            'borderStyle'=>Border::BORDER_THIN,
+        ],
     ],
 ];
 
 $judul = [
     'alignment' => [
         'horizontal' => Alignment::HORIZONTAL_CENTER,
-        'vertical' => Alignment::VERTICAL_CENTER
+        'vertical' => Alignment::VERTICAL_CENTER,
     ],
     'font' => [
         'bold' => true,
@@ -116,8 +121,9 @@ if (mysqli_num_rows($result) > 0) {
     }
 } else {
     $worksheet->mergeCells('A' . $baris_awal . ':G' . $baris_awal);
-    $worksheet->getStyle('A' . $baris_awal)->applyFromArray($dataKosong);
+    $worksheet->getStyle('A' . $baris_awal . ':G' . $baris_awal)->applyFromArray($dataKosong);
     $worksheet->setCellValue('A' . $baris_awal, 'Tidak ada data');
+
     $worksheet->getRowDimension($baris_awal)->setRowHeight(20);
 }
 $worksheet->getColumnDimension('A')->setWidth(10);
