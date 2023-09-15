@@ -147,7 +147,7 @@ function baru($post)
     $konek->close();
 }
 
-
+// reset (batal)
 function resets($post)
 {
     global $konek;
