@@ -275,11 +275,11 @@ if (isset($_POST['prosesDescPDF'])) {
       } ?>
       
       <?php if ($_SESSION['tombol_disable']) {
-        echo " <a class='btn btn-danger' onclick='confirmReset()'>batal</a> ";
+        echo " <a class='btn btn-warning' onclick='confirmReset()'>batal</a> ";
       } else {
         echo "";
       } ?>
-      <a href="pdf.php" target="_blank" rel="noopener noreferrer">Cetak</a>
+      <a href="pdf.php" target="_blank" class="btn btn-danger" rel="noopener noreferrer">Cetak PDF</a>
 
     </div>
   </form>
