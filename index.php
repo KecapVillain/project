@@ -5,6 +5,35 @@ $sql = "SELECT * FROM deskripsi_pdf";
 $query = mysqli_query($konek, $sql);
 $data = mysqli_fetch_array($query);
 
+
+// Alert Berhasil di hapus
+if (isset($_GET['message'])) {
+  $message = $_GET['message'];
+  echo "
+  <script>
+      Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: '$message'
+      }).then(function (){;
+      window.location.href = 'index.php';
+      })
+      </script>";
+}
+if (isset($_GET['error'])) {
+  $message = $_GET['error'];
+  echo "
+  <script>
+      Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '$message'
+      }).then(function (){;
+      window.location.href = 'index.php';
+      })
+      </script>";
+}
+
 if (!isset($_SESSION['tombol_disable'])) {
   $_SESSION['tombol_disable'] = false;
 }
@@ -25,12 +54,6 @@ if (isset($_POST['simpanPisah'])) {
 
 if (isset($_POST['baru+'])) {
   if (baru($_POST) > 0) {
-
-  }
-}
-
-if (isset($_POST['reset-'])) {
-  if (resets($_POST) > 0) {
   }
 }
 
@@ -49,8 +72,8 @@ if (isset($_POST['prosesDescPDF'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
+  <link rel="stylesheet" href="./style/sweetalert2.min.css">
+  <link rel="stylesheet" href="./style/animate.min.css">
   <title>oawd</title>
 </head>
 <style>
@@ -147,7 +170,12 @@ if (isset($_POST['prosesDescPDF'])) {
           <th>harga</th>
           <th>Diskon</th>
           <th>subtotal</th>
-          <th>aksi</th>
+          <?php if ($_SESSION['tombol_disable']) { ?>
+            <th>aksi</th>
+          <?php } else {
+            echo "";
+          } ?>
+
         </tr>
       </thead>
       <tbody>
@@ -183,14 +211,16 @@ if (isset($_POST['prosesDescPDF'])) {
             <td style="width: 13%;"><input type="text" readonly value="<?php echo $display['diskon'] . "%"; ?>" style="width: 100%; border: none;" name="diskonB"></td>
             <td style="width: 13%;"><input type="text" readonly value="<?= number_format($subtotal); ?>" style="width: 100%; border: none;"></td>
             <input type="text" readonly value="<?= $subtotal; ?>" style="width: 100%; border: none;" name="subtotalB" hidden>
-            <td style=""><button type="submit" name="batal"><a style="text-decoration: none;" href="hapus.php?pk=<?= $display['pk'] ?>">Batal</a></button></td>
+            <?php if ($_SESSION['tombol_disable']) { ?>
+              <td><a class='btn btn-danger' onclick='confirmHapus(<?= $display["pk"] ?>)'>Hapus</a> </td>
+            <?php } else {
+              echo "";
+            } ?>
           </tr>
-
-        <?php  
-        }  echo terbilang(round($granTotal));
-      
+        <?php
+        }
         ?>
-        
+
         <tr style="border: white;">
           <td></td>
           <td></td>
@@ -231,21 +261,29 @@ if (isset($_POST['prosesDescPDF'])) {
       </tbody>
     </table>
     <div style="padding-left: 5px; padding-right: 5px;">
-      <button type="submit" name="baru+" <?php if ($_SESSION['tombol_disable']) {
-       echo "disabled";
-      } else{
+
+      <?php if ($_SESSION['tombol_disable']) {
+                                            echo "";
+                                          } else {
+                                            echo '<button type="submit" name="baru+">baru</button> ';
+                                          } ?>
+
+      <?php if ($_SESSION['tombol_disable']) {
+        echo '<button type="submit" name="simpanPisah" class="btn btn-primary">simpan</button>';
+      } else {
         echo "";
-      }?>> baru</button>
-      <button type="submit" name="simpanPisah">simpan</button>
-      <button type="submit" name="reset-" onclick="return confirm('yakin untuk mereset?') " <?php if ($_SESSION['tombol_disable']) {
-                                                                                              echo "";
-                                                                                            } else {
-                                                                                              echo "disabled";
-                                                                                            } ?>>batal</button>
+      } ?>
+      
+      <?php if ($_SESSION['tombol_disable']) {
+        echo " <a class='btn btn-danger' onclick='confirmReset()'>batal</a> ";
+      } else {
+        echo "";
+      } ?>
       <a href="pdf.php" target="_blank" rel="noopener noreferrer">Cetak</a>
 
     </div>
   </form>
+<br>
 
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#example2" name="awal2">
     Edit deskripsi
@@ -297,13 +335,13 @@ if (isset($_POST['prosesDescPDF'])) {
     </div>
   </form>
 
-   <!-- Modal -->
-   
+  <!-- Modal -->
+
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#emxaple3" name="awal2">
     Email
   </button>
 
-   <form action="pdf-Email.php" method="post">
+  <form action="pdf-Email.php" method="post">
     <div class="modal fade" id="emxaple3" tabindex="-1" aria-labelledby="example3ModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -313,10 +351,10 @@ if (isset($_POST['prosesDescPDF'])) {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-          <div class="row mb-3">
+            <div class="row mb-3">
               <label for="" class="col-sm-2 col-form-label">Email </label>
               <div class="col-sm-10">
-                <input type="email" name="emailOrang"  value="cri.bhaskara@gmail.com" class="form-control" required></input>
+                <input type="email" name="emailOrang" value="cri.bhaskara@gmail.com" class="form-control" required></input>
               </div>
             </div>
             <div class="row mb-3">
@@ -342,7 +380,42 @@ if (isset($_POST['prosesDescPDF'])) {
   </form>
 
 
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script src="./style/sweetalert2.min.js"></script>
   <script>
+    function confirmHapus(pk) {
+      Swal.fire({
+        title: 'Yakin Untuk Mengahapus?',
+        text: "Barang yang di hapus tidak akan kembali!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'hapus.php?pk=' + pk;
+        }
+      })
+    }
+
+    function confirmReset() {
+      Swal.fire({
+        title: 'Yakin Untuk Di Reset?',
+        text: "Barang yang di Reset tidak akan kembali!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Reset!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'resetInvoice.php';
+        }
+      })
+    }
+
     function validasiangka() {
       let pok = document.getElementById("input_jumlah");
       let kop = pok.value;
@@ -397,7 +470,6 @@ if (isset($_POST['prosesDescPDF'])) {
     window.addEventListener('load', length3);
     window.addEventListener('load', length4);
   </script>
-
 
 </body>
 
