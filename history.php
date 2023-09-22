@@ -27,7 +27,15 @@ require "config/koneksi.php";
 </style>
 
 <body>
+
+    <hr>
     <form action="" method="post">
+    <!-- <select name="database" id="">
+        <option selected>pilih</option>
+        <option value="semua" <?php if (@$_POST['database'] == "semua") { echo "selected"; } ?>>semua</option>
+        <option value="invoice_body" <?php if (@$_POST['database'] == "invoice_body") { echo "selected"; } ?>>badan</option>
+    <option value="invoice_header">kepala</option>
+</select> -->
         <label for="start-date">Tanggal Awal:</label>
         <input type="date" required name="tgl_awal" value="<?php echo @$_POST['tgl_awal'] . date('Y-m-01'); ?>">
         <label for="end-date">Tanggal Akhir:</label>
@@ -38,7 +46,9 @@ require "config/koneksi.php";
         } ?>
     </form>
 
+<?php
 
+?>
 
     <table class="table-costume" border="2" style="margin: auto;" id="data-table">
         <tr>
@@ -51,22 +61,37 @@ require "config/koneksi.php";
             <th>Disc</th>
         </tr>
         <?php
-        if (isset($_POST["filter"])) {
+        if (isset($_POST["filter"]) || isset($_POST['selectSUBMIT'])) {
             $awal = $_POST['tgl_awal'];
             $akhir = $_POST["tgl_akhir"];
-            if (isset($awal) && isset($akhir) && !empty($awal) && !empty($akhir)) {
-                $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
-                $hasil = mysqli_query($konek, $quer);
-                $linkPDF = "pdfHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
-                $linkExcel = "excelHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
-                $total = 0;
-                $totalDisc = 0;
-            } else {
-                $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
-                $hasil = mysqli_query($konek, $quer);
-                $linkPDF = "pdfHistory.php";
-                $linkExcel = "excelHistory.php";
-            }
+            // $database = $_POST['database'];
+            // $queryBody = "SELECT * FROM invoice_body  WHERE waktu BETWEEN '$awal' AND '$akhir'";
+            // $queryHeader = "SELECT * FROM invoice_header  WHERE waktu BETWEEN '$awal' AND '$akhir'";
+            // $semua = "$queryBody UNION $queryHeader";
+                if (isset($awal) && isset($akhir) && !empty($awal) && !empty($akhir)) {
+                    // if ($database == "semua") {
+                    //     $quer =  $semua;
+                    // }
+                    //     elseif($database =="invoice_body"){
+                    //         $quer = $queryBody;
+                    //         $selected = "selected";
+                    //     }
+                    //     elseif($database =="invoice_header"){
+                    //         $quer = $queryHeader;
+                    //     }
+                    $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
+                    $hasil = mysqli_query($konek, $quer);
+                    $linkPDF = "pdfHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
+                    $linkExcel = "excelHistory.php?tgl_awal= " .  $awal . "&tgl_akhir= " . $akhir . "&filter=true";
+                    $total = 0;
+                    $totalDisc = 0;
+                } else {
+                    $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
+                    $hasil = mysqli_query($konek, $quer);
+                    $linkPDF = "pdfHistory.php";
+                    $linkExcel = "excelHistory.php";
+                }
+            
         ?>
             <a href="<?= $linkPDF ?>" target="_blank" rel="noopener noreferrer">Cetak PDF</a>
             <a href="<?= $linkExcel ?>" target="_blank" rel="noopener noreferrer">Cetak Excel</a>
