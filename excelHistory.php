@@ -126,6 +126,7 @@ if (mysqli_num_rows($result) > 0) {
 
     $worksheet->getRowDimension($baris_awal)->setRowHeight(20);
 }
+
 $worksheet->getColumnDimension('A')->setWidth(10);
 $worksheet->getColumnDimension('B')->setWidth(20);
 $worksheet->getColumnDimension('C')->setWidth(20);
