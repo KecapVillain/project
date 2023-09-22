@@ -1,6 +1,61 @@
 <?php
-// Load PHPMailer
 
+ // terbilang pada pdf
+ function terbilang($angka){
+     $angka;
+     $bilangan = array(
+         '',
+         'Satu',
+         'Dua',
+         'Tiga',
+         'Empat',
+         'Lima',
+         'Enam',
+         'Tujuh',
+         'Delapan',
+         'Sembilan',
+         'Sepuluh',
+         'Sebelas'
+     );
+
+     // cara kerja : 
+     // contoh angka 198
+     // jadi 198 akan masuk ke kondisi "< 200" maka terbilang (198 - 100) = 98, dan 98 akan masuk ke kondisi < 100
+     // lalu terbilang (98 / 10) = 9.8 (dan konteks nya adalah terbilang otomatis terbilang tidak menghitung koma) 
+     //jadi 9.8 terpisah menjadi 9 dan 8 lalu 9 dan 8 akan di ambil dari array variable bilangan 
+     // maka jadinya sembilan PULUH (kata puluh dari percabangan < 100) delapan 
+     $terbilang = '';
+     if ($angka < 12) {
+         $terbilang = $bilangan[$angka];
+     } elseif ($angka < 20) {
+         if ($angka == 1) {
+             $terbilang = 'satu';
+         } else {
+             $terbilang = terbilang($angka - 10) . ' belas';
+         }
+     } elseif ($angka < 100) {
+         $terbilang = terbilang($angka / 10) . ' puluh ' . terbilang($angka % 10);
+     } elseif ($angka < 200) {
+         $terbilang = ' seratus ' . terbilang($angka - 100);
+     } elseif ($angka < 1000) {
+         $terbilang = terbilang($angka / 100) . ' ratus ' . terbilang($angka % 100);
+     } elseif ($angka < 2000) {
+         $terbilang = ' seribu ' . terbilang($angka - 1000);
+     } elseif ($angka < 1000000) {
+         $terbilang = terbilang($angka / 1000) . ' ribu ' . terbilang($angka % 1000);
+     } elseif ($angka < 1000000000) {
+         $terbilang = terbilang($angka / 1000000) . ' juta ' . terbilang($angka % 1000000);
+     } elseif ($angka < 1000000000000) {
+         $terbilang = terbilang($angka / 1000000000) . ' milyar ' . terbilang($angka % 1000000000);
+     } else {
+         $terbilang = 'Angka terlalu besar untuk diterjemahkan';
+     }
+
+     return $terbilang;
+ }
+
+
+// Load PHPMailer
 use Spipu\Html2Pdf\Html2Pdf;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
