@@ -64,7 +64,6 @@ use PHPMailer\PHPMailer\Exception;
 if (isset($_POST['Email'])) {
 
     ob_start();
-    require "config/function.php";
     require "config/koneksi.php";
     $sql = "SELECT * FROM deskripsi_pdf";
     $query = mysqli_query($konek, $sql);
@@ -491,20 +490,35 @@ if (isset($_POST['Email'])) {
     $mail->isHTML(true);
     $mail->Subject = $_POST['subject'];
     $mail->Body = $_POST['bodyEmail'];
-    $link = 'index.php';
     if ($mail->send()) {
+        ?>
+        <html lang="en">
+        <head>
+        <link rel="stylesheet" href="./style/sweetalert2.min.css">
+<link rel="stylesheet" href="./style/animate.min.css">
+        </head>
+        <body>
+        <?php
         echo "<script>
-    alert('Email telah terkirim!');
-    window.location.href = '$link';
+    window.location.href = 'index.php?message=Transaksi+Berhasil+Terkirim!!';
     </script>";
     } else {
-        echo "<script>alert('Email tidak dapat dikirim. Kesalahan: {$mail->ErrorInfo}')
-       window.location.href = '$link';
+        echo "<script>
+        Swal.fire({
+            title: 'Error!',
+            text: '',
+            icon: 'error'
+          })
+       window.location.href = 'index.php?error=Email+tidak+dapat+dikirim.+Kesalahan:+{$mail->ErrorInfo}';
        </script>";
     }
 } else {
-    $link = "index.php";
-    echo "<script>alert('Mohon Mengirim di tempat yang sudah di tentukan');
-    window.location.href = '$link';</script>";
+
+    echo "<script>
+    window.location.href = 'index.php?error=Mohon+Mengirim+di+tempat+yang+sudah+di+tentukan';</script>";
 }
 ?>
+</body>
+<script src="./style/sweetalert2.min.js"></script>
+
+        </html>
