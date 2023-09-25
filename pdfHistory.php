@@ -1,9 +1,5 @@
 <?php ob_start();
-require "config/function.php";
 require "config/koneksi.php";
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -34,44 +30,43 @@ require "config/koneksi.php";
         History Penjualan
     </h2>
     <table class="table-costume" border="2" style="margin: auto;" id="data-table">
-    <tr>
+        <tr>
             <th>NO</th>
             <th>No. note</th>
             <th>tgl</th>
-            <th>Deskripsi</th>
-            <th>Quantity</th>
-            <th>Harga</th>
-            <th>Disc</th>
+            <th>Nama</th>
+            <th>Total</th>
+            <th>PPN</th>
+            <th>Total Diskon</th>
+            <th>Gran Total</th>
         </tr>
         <?php
-            $awal = @$_GET['tgl_awal'];
-            $akhir = @$_GET["tgl_akhir"];
-                $quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";
-                $hasil = mysqli_query($konek, $quer);
-                $row = mysqli_num_rows($hasil);
-                $total = 0;
-                $totalDisc = 0;
-                $ulang = 1;
-                if ($row > 0) {
-                    while ($dis_b = mysqli_fetch_assoc($hasil)) {
-                        echo "<tr id='data-list'>";
-                        echo "<td>" . $ulang . "</td>";
-                        echo "<td>" . $dis_b['NT'] . "</td>";
-                        echo "<td data-date='" . $dis_b['waktu'] . "'>" . $dis_b['waktu'] . "</td>";
-                        echo "<td>" . $dis_b['deskripsi'] . "</td>";
-                        echo "<td>" . $dis_b['QTY'] . "</td>";
-                        echo "<td>" . number_format($dis_b['harga']) . "</td>";
-                        echo "<td>" . $dis_b['diskon'] . "%</td>";
-                        echo "</tr>";
-                        $ulang++;
-                    
-                }
-                     
-                    }
-                    else{
-                        echo "<tr><td colspan='7' style='text-align: center;'>Data tidak ada</td></tr>";
-                 }
-    
+        $awal = @$_GET['tgl_awal'];
+        $akhir = @$_GET["tgl_akhir"];
+        $quer = "SELECT * FROM invoice_header WHERE waktu BETWEEN '$awal' AND '$akhir'";
+        $hasil = mysqli_query($konek, $quer);
+        $row = mysqli_num_rows($hasil);
+        $total = 0;
+        $totalDisc = 0;
+        $ulang = 1;
+        if ($row > 0) {
+            while ($dis_h = mysqli_fetch_assoc($hasil)) { ?>
+                <tr>
+                    <td><?= $ulang ?></td>
+                    <td><?= $dis_h['NT'] ?></td>
+                    <td data-date="<?= $dis_h['waktu'] ?>"><?= $dis_h['waktu'] ?></td>
+                    <td><?= $dis_h['nama'] ?></td>
+                    <td><?= number_format($dis_h['total']) ?></td>
+                    <td><?= $dis_h['PPN'] ?>%</td>
+                    <td><?= $dis_h['totalDISC'] ?>%</td>
+                    <td><?= number_format($dis_h['granTOTAL']) ?></td>
+                </tr>
+        <?php $ulang++;
+            }
+        } else {
+            echo "<tr><td colspan='7' style='text-align: center;'>Data tidak ada</td></tr>";
+        }
+
         ?>
     </table>
     <hr>
