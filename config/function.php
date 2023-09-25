@@ -109,7 +109,6 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
                     text: 'Barang Berhasil Tersimpan!!',
                     icon: 'success'
                   })
-                    
                     </script>";
             } else {
                 echo "error :" . $konek->error;
@@ -178,6 +177,39 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
         </script>";
         } else {
             echo "error" . $konek->error;
+        }
+    }
+
+    function updateHistory($post)
+    {
+        $pk = $_GET['pk'];
+        global $konek;
+        $nama = htmlspecialchars($_POST['nama']);
+        $total = htmlspecialchars($_POST['total']);
+        $PPN =  htmlspecialchars($_POST['PPN']);
+        $totalDISC = htmlspecialchars($_POST['totalDISC']);
+        $granTOTAL = htmlspecialchars($_POST['granTOTAL']);
+
+        $sql = "UPDATE invoice_header SET
+            nama = '$nama',
+            total = '$total',
+            PPN = '$PPN',
+            totalDISC = '$totalDISC',
+            granTOTAL = '$granTOTAL'
+            WHERE pk = '$pk'";
+
+        if ($konek->query($sql) === TRUE) {
+            echo "<script>
+                    window.location.href = 'history.php?message=Data+Berhasil+Terupdate';
+                    </script>";
+        } else {
+            echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Data Tidak Terupdate!!',
+                    icon: 'error'
+                  })
+                    </script>";
         }
     }
     ?>
