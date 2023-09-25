@@ -1,12 +1,11 @@
 <?php
-require 'config/function.php';
 require 'config/koneksi.php';
 require 'vendor/autoload.php';
 
 // ===============================================================================+
 $awal = @$_GET['tgl_awal'];                                                     //|
 $akhir = @$_GET["tgl_akhir"];                                                   //|
-$quer = "SELECT * FROM invoice_body WHERE waktu BETWEEN '$awal' AND '$akhir'";  //|
+$quer = "SELECT * FROM invoice_header WHERE waktu BETWEEN '$awal' AND '$akhir'";  //|
 $result = mysqli_query($konek, $quer);                                          //|
 // ===============================================================================+
 
@@ -46,7 +45,8 @@ $kepala = [
 
 $badan = [
     'alignment' => [
-        'horizontal' => Alignment::HORIZONTAL_LEFT,
+        'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+        'vertical' => Alignment::VERTICAL_JUSTIFY
     ],
     'borders' => [
         'allBorders' => [
@@ -78,22 +78,21 @@ $judul = [
     ]
 ];
 
-$worksheet->getStyle("A1:G1")->applyFromArray($judul);
+$worksheet->getStyle("A1:H1")->applyFromArray($judul);
 $worksheet->setCellValue('A1', 'Data Transaksi');
-$worksheet->mergeCells('A1:G1');
+$worksheet->mergeCells('A1:H1');
 $worksheet->getRowDimension('1')->setRowHeight(25);
-
 $worksheet->setCellValue('A2', "Dari Tanggal : " . $awal);
 $worksheet->setCellValue('A3', "Sampai Tanggal : " . $akhir);
-
 $worksheet->setCellValue('A5', 'No');
 $worksheet->setCellValue('B5', 'Nomor Transaksi');
-$worksheet->setCellValue('C5', 'Waktu');
-$worksheet->setCellValue('D5', 'Deskripsi');
-$worksheet->setCellValue('E5', 'QTY');
-$worksheet->setCellValue('F5', 'Harga');
-$worksheet->setCellValue('G5', 'Diskon');
-$worksheet->getStyle('A5:G5')->applyFromArray($kepala);
+$worksheet->setCellValue('C5', 'Tanggal');
+$worksheet->setCellValue('D5', 'nama');
+$worksheet->setCellValue('E5', 'Total');
+$worksheet->setCellValue('F5', 'PPN');
+$worksheet->setCellValue('G5', 'Total Diskon');
+$worksheet->setCellValue('H5', 'Gran Total');
+$worksheet->getStyle('A5:H5')->applyFromArray($kepala);
 
 $baris_awal = 6;
 $ulang = 1;
@@ -102,10 +101,11 @@ if (mysqli_num_rows($result) > 0) {
         $worksheet->setCellValue('A' . $baris_awal, $ulang);
         $worksheet->setCellValue('B' . $baris_awal, $hasil['NT']);
         $worksheet->setCellValue('C' . $baris_awal, $hasil['waktu']);
-        $worksheet->setCellValue('D' . $baris_awal, $hasil['deskripsi']);
-        $worksheet->setCellValue('E' . $baris_awal, $hasil['QTY']);
-        $worksheet->setCellValue('F' . $baris_awal, number_format($hasil['harga']));
-        $worksheet->setCellValue('G' . $baris_awal, $hasil['diskon'] . '%');
+        $worksheet->setCellValue('D' . $baris_awal, $hasil['nama']);
+        $worksheet->setCellValue('E' . $baris_awal, number_format($hasil['total']));
+        $worksheet->setCellValue('F' . $baris_awal, $hasil['PPN'] . '%');
+        $worksheet->setCellValue('G' . $baris_awal, $hasil['totalDISC'] . '%');
+        $worksheet->setCellValue('H' . $baris_awal, number_format($hasil['granTOTAL']));
 
         $worksheet->getStyle("A" . $baris_awal)->applyFromArray($badan);
         $worksheet->getStyle("B" . $baris_awal)->applyFromArray($badan);
@@ -114,6 +114,7 @@ if (mysqli_num_rows($result) > 0) {
         $worksheet->getStyle("E" . $baris_awal)->applyFromArray($badan);
         $worksheet->getStyle("F" . $baris_awal)->applyFromArray($badan);
         $worksheet->getStyle("G" . $baris_awal)->applyFromArray($badan);
+        $worksheet->getStyle("H" . $baris_awal)->applyFromArray($badan);
 
         $worksheet->getRowDimension($baris_awal)->setRowHeight(20);
         $baris_awal++;
