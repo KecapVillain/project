@@ -73,19 +73,23 @@ $konek = mysqli_connect("localhost", "root", "", "project");
         $tanggal = date("Y-m-d H:i:s");
         $nama = $_POST["nama"];
         $_SESSION['nama'] = $nama;
-        $deskripsi = $_POST["deskripsiB"];
-        $jumlah = $_POST["QTYB"];
-        $harga = $_POST["hargaB"];
+        $deskripsi = @$_POST["deskripsiB"];
+        $jumlah = @$_POST["QTYB"];
+        $harga = @$_POST["hargaB"];
         $total = $_POST["total"];
         $PPN = $_POST["PPN"];
         $totalDISC = $_POST["totalDISC"];
         $grantotal = $_POST["grantotal"];
 
         if (empty($nama) || empty($deskripsi) || empty($jumlah) || empty($harga) ||  empty($total)) {
-
             echo "<script>
-    alert('Data tidak boleh kosong!');
-    </script>";
+            Swal.fire({
+                title: 'Error!',
+                text: 'Data Tidak Boleh Kosong',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              }) </script>";
+
         } else {
             $sql = "INSERT INTO invoice_header (NT,tgl,nama, tglJatuhTempo, total, PPN , totalDISC ,granTOTAL ,waktu)
             VALUES ('$NT','$tanggal', '$nama', '$tanggal','$total', '$PPN' , '$totalDISC', '$grantotal' ,NOW())";
@@ -143,8 +147,12 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
             $link = "index.php";
             echo "
             <script>
-            alert('tidak ada data')
-            window.location.href = '$link';
+            Swal.fire({
+                title: 'Error!',
+                text: 'Tidak Ada Data!!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              })            window.location.href = '$link';
             </script>";
         }
 
@@ -167,10 +175,15 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
     keempat='$keempat'
     ";
         if ($konek->query($update) === TRUE) {
-            $link = "index.php";
             echo "<script>
-        alert('Terupdate');
-        window.location.href = '$link';
+            Swal.fire({
+                title: 'Success!',
+                text: 'Deskripsi Pada PDF Terupdate!!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then(function (){;
+                window.location.href = 'index.php';
+                })
         </script>";
         } else {
             echo "error" . $konek->error;
