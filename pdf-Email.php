@@ -504,11 +504,6 @@ if (isset($_POST['Email'])) {
     </script>";
     } else {
         echo "<script>
-        Swal.fire({
-            title: 'Error!',
-            text: '',
-            icon: 'error'
-          })
        window.location.href = 'index.php?error=Email+tidak+dapat+dikirim.+Kesalahan:+{$mail->ErrorInfo}';
        </script>";
     }
