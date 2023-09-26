@@ -317,7 +317,7 @@ if (isset($_POST['prosesDescPDF'])) {
             <div class="row mb-3">
               <label for="" class="col-sm-2 col-form-label">No 4: <div id="counter4"></div> </label>
               <div class="col-sm-10">
-                <textarea name="keempat" id="panjangkata4" cols="30" rows="2" maxlength="120" class="form-control" oninput="length3,()"><?= $data['keempat'] ?></textarea>
+                <textarea name="keempat" id="panjangkata4" cols="30" rows="2" maxlength="120" class="form-control" oninput="length4()"><?= $data['keempat'] ?></textarea>
               </div>
             </div>
 
