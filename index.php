@@ -35,11 +35,7 @@ if (isset($_GET['error'])) {
 }
 
 if (!isset($_SESSION['tombol_disable'])) {
-  $_SESSION['tombol_disable'] = false;
-}
-
-if (!isset($_SESSION['tombol_batal'])) {
-  $_SESSION['tombol_batal'] = true;
+  $_SESSION['tombol_disable'] = true;
 }
 
 if (isset($_POST['proses'])) {
@@ -263,17 +259,17 @@ if (isset($_POST['prosesDescPDF'])) {
     <div style="padding-left: 5px; padding-right: 5px;">
 
       <?php if ($_SESSION['tombol_disable']) {
-                                            echo "";
-                                          } else {
-                                            echo '<button type="submit" name="baru+">baru</button> ';
-                                          } ?>
+        echo "";
+      } else {
+        echo '<button type="submit" name="baru+">baru</button> ';
+      } ?>
 
       <?php if ($_SESSION['tombol_disable']) {
         echo '<button type="submit" name="simpanPisah" class="btn btn-primary">simpan</button>';
       } else {
         echo "";
       } ?>
-      
+
       <?php if ($_SESSION['tombol_disable']) {
         echo " <a class='btn btn-warning' onclick='confirmReset()'>batal</a> ";
       } else {
@@ -283,7 +279,7 @@ if (isset($_POST['prosesDescPDF'])) {
 
     </div>
   </form>
-<br>
+  <br>
 
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#example2" name="awal2">
     Edit deskripsi

@@ -100,8 +100,6 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
 
             if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE && $konek->query($sql3) === TRUE) {
                 $_SESSION['tombol_disable'] = false;
-                $_SESSION['tombol_batal'] = true;
-
                 echo "<script>
                 
                 Swal.fire({
@@ -136,8 +134,7 @@ SELECT NT,deskripsi, QTY ,harga, diskon , (QTY * harga), NOW() FROM invoice";
             if ($konek->query($sql) === TRUE && $konek->query($sql2) === TRUE) {
                 unset($_SESSION['nama']);
                 unset($_SESSION['transactionNumber']);
-                $_SESSION['tombol_disable'] = true;
-                $_SESSION['tombol_batal'] = false;
+                $_SESSION['tombol_disable'] = true;                
                 header("Location: index.php");
             } else {
                 echo "Error: " . $sql . "<br>" . $konek->error;
