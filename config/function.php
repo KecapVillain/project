@@ -6,7 +6,6 @@ $konek = mysqli_connect("localhost", "root", "", "project");
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <link rel="stylesheet" href="./style/sweetalert2.min.css">
     <link rel="stylesheet" href="./style/animate.min.css">
