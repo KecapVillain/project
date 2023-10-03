@@ -92,7 +92,6 @@ $row = mysqli_num_rows($select_result);
         word-wrap: break-word;
         padding: 5px;
         font-size: small;
-
     }
 </style>
 
@@ -105,7 +104,7 @@ $row = mysqli_num_rows($select_result);
             <td style="width: 100%;">
                 <table class="table table-costume">
                     <tr>
-                        <td style="text-align: right; width: 117%; font-size: 14;">418313018321318-31-2309-1293000</td>
+                        <td style="text-align: right; width: 117%; font-size: 14px;">418313018321318-31-2309-1293000</td>
                     </tr>
                 </table>
             </td>
