@@ -81,6 +81,7 @@ $row = mysqli_num_rows($select_result);
         width: 85%;
         padding-right: 15%;
     }
+    
 
     .table-costume th {
         padding: 0px 30px 0px 30px;
@@ -92,10 +93,38 @@ $row = mysqli_num_rows($select_result);
         word-wrap: break-word;
         padding: 5px;
         font-size: small;
+
+    }
+
+    .bug {
+border-right: none;
     }
 </style>
 
 <body>
+    <table class="table-costume" border="2">
+        <tr>
+            <td style="width: 24%; padding: 10px; text-align: center;">No Nota</td>
+            <td style="width: 24%; padding: 10px; text-align: center;">Tanggal</td>
+            <td style="width: 24%; padding: 10px; text-align: center;">Keterangan</td>
+            <td colspan="2" style="padding: 10px; text-align: center;">Jumlah</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;"><?= 'awdawd' ?></td>
+            <td style="text-align:center;"><?= date('d-m-Y') ?></td>
+            <td><?= 'awdawdwa' ?></td>
+            <td class="bug">Rp.</td>
+            <td style="width: 16%;">
+                <table class="table-costume" border="2">
+                    <tr>
+                        <td style="text-align:right; width: 117%;">oakdoakwdk</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <br><br>
     <table class="table table-costume" border="2">
         <tr>
             <td>
